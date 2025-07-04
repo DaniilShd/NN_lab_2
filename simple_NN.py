@@ -146,7 +146,7 @@ def export_model(model, dummy_input):
     torch.onnx.export(
         model,  # модель
         dummy_input,  # пример входа
-        "simple_cnn.onnx",  # имя выходного файла
+        "onnx/simple_cnn.onnx",  # имя выходного файла
         input_names=['input'],  # имя входа
         output_names=['output'],  # имя выхода
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}},  # поддержка разных batch size
@@ -181,8 +181,8 @@ if __name__ == "__main__":
                                                 train_loader,
                                                 test_loader)
 
-    save.to_json('metrics_simple_nn', "train_losses", train_losses)
-    save.to_json('metrics_simple_nn', "test_accuracies", test_accuracies)
+    save.to_json('metrics/simple_nn', "train_losses", train_losses)
+    save.to_json('metrics/simple_nn', "test_accuracies", test_accuracies)
 
     model.eval()  # Переводим модель в режим оценки
 

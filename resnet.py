@@ -201,8 +201,8 @@ if __name__ == "__main__":
                                                 train_loader,
                                                 test_loader)
 
-    save.to_json('metrics_resnet_nn', "train_losses", train_losses)
-    save.to_json('metrics_resnet_nn', "test_accuracies", test_accuracies)
+    save.to_json('metrics/resnet_nn', "train_losses", train_losses)
+    save.to_json('metrics/resnet_nn', "test_accuracies", test_accuracies)
 
     model.eval()  # Переводим модель в режим оценки
 
