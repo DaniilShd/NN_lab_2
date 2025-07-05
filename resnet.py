@@ -39,7 +39,7 @@ class BasicBlock(nn.Module):
         return out
 
 class TinyResNet(nn.Module):
-    """Упрощённый ResNet для CIFAR-10 (например)."""
+    """Упрощённый ResNet"""
     def __init__(self, num_classes=10):
         super().__init__()
         self.in_channels = 16
@@ -50,8 +50,8 @@ class TinyResNet(nn.Module):
 
         # Блоки ResNet
         self.layer1 = self._make_layer(16, 2, stride=1)   # 64x28x28 -> 64x28x28
-        self.layer2 = self._make_layer(128, 3, stride=2)  # 64x28x28 -> 128x14x14
-        self.layer3 = self._make_layer(256, 3, stride=2)  # 128x14x14 -> 256x7x7
+        self.layer2 = self._make_layer(128, 1, stride=2)  # 64x28x28 -> 128x14x14
+        self.layer3 = self._make_layer(256, 1, stride=2)  # 128x14x14 -> 256x7x7
         # self.layer4 = self._make_layer(512, 2, stride=2)  # 256x8x8 -> 512x4x4
 
         # Финальный полносвязный слой
@@ -72,8 +72,8 @@ class TinyResNet(nn.Module):
         out = self.layer2(out)
         out = self.layer3(out)
         # out = self.layer4(out)
-        out = F.avg_pool2d(out, 7)  # Global Average Pooling: 512x4x4 -> 512x1x1
-        out = out.view(out.size(0), -1)  # Flattn
+        out = F.avg_pool2d(out, 7)  # Global Average Pooling: 256x7x7 -> 256x1x1
+        out = out.view(out.size(0), -1)  # Flatten
         out = self.linear(out)
         return out
 
@@ -198,7 +198,7 @@ if __name__ == "__main__":
                                                 criterion,
                                                 device,
                                                 optimiser,
-                                                1,
+                                                5,
                                                 train_loader,
                                                 test_loader)
 
@@ -208,5 +208,7 @@ if __name__ == "__main__":
     model.eval()  # Переводим модель в режим оценки
 
     tensor_image, label = train_dataset[0]
+
+    print(tensor_image.size())
 
     export_model(model, tensor_image.unsqueeze(0).to(device))

@@ -14,22 +14,20 @@ class SimpleCNN(nn.Module):
         super(SimpleCNN, self).__init__()
 
         # Первый сверточный слой: вход 1 канал, выход 8 каналов, ядро 3x3
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=8, kernel_size=3, padding=1)
-        self.bn1 = nn.BatchNorm2d(8)
+        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, padding=1)
+        self.bn1 = nn.BatchNorm2d(32)
 
         # Второй сверточный слой: вход 8 каналов, выход 16 каналов, ядро 3x3
-        self.conv2 = nn.Conv2d(in_channels=8, out_channels=16, kernel_size=3, padding=1)
-        self.bn2 = nn.BatchNorm2d(16)
+        self.conv2 = nn.Conv2d(in_channels=32, out_channels=64, kernel_size=3, padding=1)
+        self.bn2 = nn.BatchNorm2d(64)
 
-        self.fc1 = nn.Linear(16 * 7 * 7, 256)  # выход 10 классов
+        self.conv3 = nn.Conv2d(in_channels=64, out_channels=128, kernel_size=3, padding=1)
+        self.bn3 = nn.BatchNorm2d(128)
 
-        self.fc2 = nn.Linear(256, 128)  # выход 10 классов
+        self.fc1 = nn.Linear(128 * 3 * 3, 256)  # предполагается input size 28x28
+        self.fc2 = nn.Linear(256, 10)
 
-        # Dropout layer
-        self.dropout = nn.Dropout(0.4)
-
-        # Полносвязный слой для классификации
-        self.fc3 = nn.Linear(128, 10)  # выход 10 классов
+        self.dropout = nn.Dropout(0.5)
 
     def forward(self, x):
         # Первый сверточный слой + ReLU + MaxPool
@@ -44,16 +42,19 @@ class SimpleCNN(nn.Module):
         x = F.max_pool2d(x, 2)  # снова уменьшаем
         x = self.dropout(x)
 
+        x = F.relu(self.conv3(x))
+        x = self.bn3(x)
+        x = F.max_pool2d(x, 2)  # снова уменьшаем
+        x = self.dropout(x)
+
         # Преобразуем тензор в вектор перед полносвязным слоем
 
         x = x.view(x.size(0), -1)
 
         x = F.relu(self.fc1(x))
-
-        x = F.relu(self.fc2(x))
-
+        x = self.dropout(x)
         # Полносвязный слой
-        x = F.relu(self.fc3(x))
+        x = F.relu(self.fc2(x))
         return x
 
 
@@ -177,7 +178,7 @@ if __name__ == "__main__":
                                                 criterion,
                                                 device,
                                                 optimiser,
-                                                1,
+                                                10,
                                                 train_loader,
                                                 test_loader)
 
