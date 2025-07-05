@@ -87,28 +87,6 @@ def get_dataset(path):
 
     return get_MNIST(path, download)
 
-def get_MNIST(base_path, download):
-    # Преобразования для нормализации данных
-    transform = transforms.Compose([
-        transforms.ToTensor(),  # Преобразует изображение в тензор [1, 28, 28]
-        transforms.Normalize((0.1307,), (0.3081,))  # Нормализация (mean, std) MNIST
-    ])
-
-    # Загрузка тренировочного и тестового наборов
-    train = datasets.MNIST(
-        root=f'{base_path}data',
-        train=True,
-        download=download,
-        transform=transform
-    )
-    test= datasets.MNIST(
-        root=f'{base_path}data',
-        train=False,
-        download=download,
-        transform=transform
-    )
-
-    return train, test
 
 
 def get_dataloader(train_dataset, test_dataset, batch_size, shuffle):
@@ -167,13 +145,36 @@ def export_model(model, dummy_input):
     torch.onnx.export(
         model,  # модель
         dummy_input,  # пример входа
-        "resnet_cnn.onnx",  # имя выходного файла
+        "onnx/resnet_cnn.onnx",  # имя выходного файла
         input_names=['input'],  # имя входа
         output_names=['output'],  # имя выхода
         dynamic_axes={'input': {0: 'batch_size'}, 'output': {0: 'batch_size'}},  # поддержка разных batch size
         opset_version=11  # версия ONNX (11 — совместимая)
     )
     print("Модель успешно экспортирована в ONNX.")
+
+def get_MNIST(base_path, download):
+    # Преобразования для нормализации данных
+    transform = transforms.Compose([
+        transforms.ToTensor(),  # Преобразует изображение в тензор [1, 28, 28]
+        transforms.Normalize((0.1307,), (0.3081,))  # Нормализация (mean, std) MNIST
+    ])
+
+    # Загрузка тренировочного и тестового наборов
+    train = datasets.MNIST(
+        root=f'{base_path}data',
+        train=True,
+        download=download,
+        transform=transform
+    )
+    test = datasets.MNIST(
+        root=f'{base_path}data',
+        train=False,
+        download=download,
+        transform=transform
+    )
+
+    return train, test
 
 
 if __name__ == "__main__":
@@ -197,7 +198,7 @@ if __name__ == "__main__":
                                                 criterion,
                                                 device,
                                                 optimiser,
-                                                10,
+                                                1,
                                                 train_loader,
                                                 test_loader)
 
