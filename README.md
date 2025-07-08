@@ -5,6 +5,19 @@
 
 Для ответов на вопросы принята простая кастомная нейронная сеть (simple_cnn). Обучена на датасете MNIST.
 
+# Анализ графа вычислений в Netron
+
+В качестве примера принят слой conv2. 
+
+![conv2](https://github.com/DaniilShd/NN_lab_2/blob/main/images/conv2)
+
+in_channels = 32
+out_channels = 64
+kernel_size = 3x3 
+padding = 1
+
+# Контрольные вопросы
+
 ## 1 Сколько параметров содержится в каждом свёрточном слое?
 Параметры свёрточного слоя рассчитываются по формуле:
 (kernel_width * kernel_height * in_channels + 1 (bias)) * out_channels
