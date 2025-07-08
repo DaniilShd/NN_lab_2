@@ -11,10 +11,13 @@
 
 ![conv2](https://github.com/DaniilShd/NN_lab_2/blob/main/images/conv2)
 
-in_channels = 32
-out_channels = 64
-kernel_size = 3x3 
-padding = 1
+    in_channels = 32
+
+    out_channels = 64
+
+    kernel_size = 3x3 
+
+    padding = 1
 
 # Контрольные вопросы
 
