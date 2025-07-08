@@ -7,6 +7,8 @@
 
 # Анализ графа вычислений в Netron
 
+## 1 Свёрточные слои (Conv2d)
+
 В качестве примера принят слой conv2. 
 
 ![conv2](https://github.com/DaniilShd/NN_lab_2/blob/main/images/conv2)
@@ -18,6 +20,32 @@
     kernel_size = 3x3 
 
     padding = 1
+
+## 2 Общее количество слоёв
+
+Модель состоит из 9 слоёв (не считая активации и dropout):
+
+    Conv2d(1, 32)
+
+    BatchNorm2d(32)
+
+    MaxPool2d(2)
+
+    Conv2d(32, 64)
+
+    BatchNorm2d(64)
+
+    MaxPool2d(2)
+
+    Conv2d(64, 128)
+
+    BatchNorm2d(128)
+
+    MaxPool2d(2)
+
+    Linear(128*3*3, 256)
+
+    Linear(256, 10)
 
 # Контрольные вопросы
 
