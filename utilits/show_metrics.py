@@ -18,7 +18,7 @@ def read_json_to_list(file_path):
         return []
 
 
-base_path = "../metrics/simple_nn"
+base_path = "../metrics/resnet_nn"
 
 dt1 = read_json_to_list(f"{base_path}/test_accuracies.json")
 dt2 = read_json_to_list(f"{base_path}/train_losses.json")
